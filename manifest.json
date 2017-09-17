@@ -16,5 +16,8 @@
     "default_icon": "icon.png",
     "default_title": "TabStack - Click to enable/disable"      // optional; shown in tooltip
   },
+  "permissions": [
+    "storage"
+  ],
   "manifest_version": 2
 }

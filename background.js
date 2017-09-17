@@ -1,45 +1,52 @@
-let enabled = true;
+let enabled = false;
 let tabTimer = 0;
+let delay = 10000;
 
-chrome.browserAction.setBadgeBackgroundColor({color:[0,0,255,255]});
-chrome.browserAction.setBadgeText({text:"On"});
+// Check at startup if we should be enabled or not
+chrome.storage.local.get('enabled', function (result) {
+  enabled = !!result.enabled; // Ensure boolean
+  updateBadge();
+});
+
+// Browser Button
 chrome.browserAction.onClicked.addListener(toggleEnabled);
-
-chrome.commands.onCommand.addListener(function(command) {
-  if (command === "toggleEnabled") {
-    toggleEnabled();
-  }
-});
-
-chrome.tabs.onActivated.addListener( function(info) {
-  queueMove(info.tabId);
-});
+// Shortcut
+chrome.commands.onCommand.addListener(command => { if (command === "toggleEnabled") toggleEnabled() });
+// Tab change
+chrome.tabs.onActivated.addListener(info => queueMove(info.tabId));
 
 function queueMove(tabId) {
-  clearTimeout(tabTimer);
+  clearTimeout(tabTimer); // Tab change always clears timeout
   if (enabled) {
     tabTimer = setTimeout(()=>{
-      placeFirst(tabId);
-    }, 10000)
+      chrome.tabs.move(tabId, {index: 0});
+    }, delay)
   }
-}
-
-function placeFirst(tabId) {
-  chrome.tabs.move(tabId, {index: 0});
 }
 
 function toggleEnabled() {
+  enabled = !enabled;
+  updateBadge();
+  saveState();
+}
+
+function updateBadge(txt) {
   if (enabled) {
-    chrome.browserAction.setBadgeBackgroundColor({color:[255,0,0,255]});
-    chrome.browserAction.setBadgeText({text:"Off"});
-    enabled = false;
-  } else {
     chrome.browserAction.setBadgeBackgroundColor({color:[0,0,255,255]});
     chrome.browserAction.setBadgeText({text:"On"});
-    enabled = true;
-
+  
+    // Start timer going in current tab
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       queueMove(tabs[0].id);
     });
+  } else {
+    chrome.browserAction.setBadgeBackgroundColor({color:[255,0,0,255]});
+    chrome.browserAction.setBadgeText({text:"Off"});    
   }
+}
+
+function saveState() {
+  chrome.storage.local.set({'enabled': enabled}, function() {
+    console.log(`Saved State - Enabled = ${enabled}`);
+  });
 }
