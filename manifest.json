@@ -1,6 +1,6 @@
 {
   "name": "TabStack",
-  "version": "1",
+  "version": "1.1",
   "description": "Spending 10 seconds in a tab moves it to position 1 in tab bar",
   "background": {
     "persistent": false,
@@ -14,7 +14,8 @@
   },
   "browser_action": {
     "default_icon": "icon.png",
-    "default_title": "TabStack - Click to enable/disable"      // optional; shown in tooltip
+    "default_title": "TabStack - Reposition active tabs",      // optional; shown in tooltip
+    "default_popup": "popup.html"
   },
   "permissions": [
     "storage"
