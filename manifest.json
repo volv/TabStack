@@ -1,0 +1,20 @@
+{
+  "name": "TabStack",
+  "version": "1",
+  "description": "Spending 10 seconds in a tab moves it to position 1 in tab bar",
+  "background": {
+    "persistent": false,
+    "scripts": ["background.js"]
+  },
+  "commands": {
+    "toggleEnabled": {
+      "suggested_key": { "default": "Alt+T" },
+      "description": "Toggle Tab 'Stacking'"
+    }
+  },
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_title": "TabStack - Click to enable/disable"      // optional; shown in tooltip
+  },
+  "manifest_version": 2
+}
