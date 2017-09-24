@@ -24,7 +24,8 @@ setTimeout(() => {
 document.body.addEventListener("change", saveAll);
 
 function saveAll() {
-  chrome.storage.local.set({'enabled': toggle.checked, 'delay': delay.value, 'position': position.value}, function() {
+  delay.value =  Math.abs(delay.value);
+  chrome.storage.local.set({'enabled': toggle.checked, 'delay': Math.abs(delay.value), 'position': position.value}, function() {
     console.log(`Saved State - Enabled = ${toggle.checked}, Delay = ${delay.value}, Position = ${position.value}, `);
   });
 }

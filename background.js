@@ -10,7 +10,7 @@ let readStored  = () => {
     enabled = !!result.enabled; // Ensure boolean
 
     if (Number(result.delay)) {
-      delay = Math.floor(Number(result.delay)*1000);
+      delay = Math.abs(Math.floor(Number(result.delay)*1000));
     } else {
       delay = 1000;
     }
